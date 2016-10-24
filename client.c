@@ -1,8 +1,8 @@
 #include<stdio.h>
-#include<string.h>    //strlen
+#include<string.h>    
 #include<sys/socket.h>
 #include<string.h>
-#include<arpa/inet.h> //inet_addr
+#include<arpa/inet.h> 
 int main(int argc , char *argv[])
 {
 int socket_desc;
@@ -32,11 +32,10 @@ puts("connect error");
 return 1;
 }
 puts("Connected\n");
-//Send some data
+//Send
  memset(server_reply,0,sizeof(server_reply));
 while(1)
 {
-//   scanf("%s",message);
    gets(message);
    if( send(socket_desc , message , strlen(message) , 0) < 0)
    {
@@ -44,7 +43,7 @@ while(1)
       return 1;
    }
    puts("Data Send\n");
-   //Receive a reply from the server
+   //Receive
    if( recv(socket_desc, server_reply , 2000 , 0) < 0)
    {
       puts("recv failed");

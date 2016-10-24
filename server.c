@@ -19,14 +19,12 @@ printf("Could not create socket");
 server.sin_family = AF_INET;
 server.sin_addr.s_addr = INADDR_ANY;
 server.sin_port = htons( 8888 );
-//Bind
 if( bind(socket_desc,(struct sockaddr *)&server , sizeof(server)) < 0)
 {
 puts("bind failed");
 return 1;
 }
 puts("bind done");
-//Listen
 listen(socket_desc , 3);
 //Accept and incoming connection
 puts("Waiting for incoming connections...");
@@ -39,14 +37,13 @@ return 1;
 }
 puts("Connection accepted");
 
-//Receive a message from client
+//Receive a message
 int read_size;
 memset(client_message,0,sizeof(client_message));
 while( (read_size = recv(new_socket , client_message , 2000 , 0)) > 0 )
 {
-//Send the message back to client
+//Send the message
 write(new_socket , client_message , strlen(client_message));
-//bzero(client_message,2000);
 memset(client_message,0,sizeof(client_message));
 }
 if(read_size == 0)
@@ -58,7 +55,7 @@ else if(read_size == -1)
 {
 perror("recv failed");
 }
-//Free the socket pointer
+//Free the socket
 free(socket_desc);
 return 0;
 }
