@@ -1,8 +1,8 @@
-server client:server.c client.c
-	g++ server.c -o server
-	g++ client.c -o client
-server.o client.o:server.c client.c
-	g++ server.c
-	g++ client.c
+server client: server.c client.c
+	gcc -o server server.c
+	gcc -o client client.c
+server.o client.o: server.c client.c
+	gcc -c server.c
+	gcc -c client.c
 clean:
-	rm *.server client
+	rm *.o server client

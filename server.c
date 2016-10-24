@@ -3,16 +3,12 @@
 #include<sys/socket.h>
 #include<arpa/inet.h> //inet_addr
 #include<unistd.h>    //write
-#include<time.h>
+#include <time.h>
 int main(int argc , char *argv[])
 {
-time_t now;
-struct tm *timeinfo;
-time (&now);
-timeinfo = localtime(&now);
 int socket_desc , new_socket , c;
 struct sockaddr_in server , client;
-char *message;
+char *message,client_message[2000];
 //Create socket
 socket_desc = socket(AF_INET , SOCK_STREAM , 0);
 if (socket_desc == -1)
@@ -42,8 +38,27 @@ perror("accept failed");
 return 1;
 }
 puts("Connection accepted");
-//Reply to the client
-message = asctime(timeinfo);
-write(new_socket , message , strlen(message));
+
+//Receive a message from client
+int read_size;
+memset(client_message,0,sizeof(client_message));
+while( (read_size = recv(new_socket , client_message , 2000 , 0)) > 0 )
+{
+//Send the message back to client
+write(new_socket , client_message , strlen(client_message));
+//bzero(client_message,2000);
+memset(client_message,0,sizeof(client_message));
+}
+if(read_size == 0)
+{
+puts("Client disconnected");
+fflush(stdout);
+}
+else if(read_size == -1)
+{
+perror("recv failed");
+}
+//Free the socket pointer
+free(socket_desc);
 return 0;
 }
